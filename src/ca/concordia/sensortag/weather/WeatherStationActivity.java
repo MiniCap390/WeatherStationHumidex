@@ -4,9 +4,14 @@
  * Author: Marc-Alexandre Chan <marcalexc@arenthil.net>
  * Institution: Concordia University
  */
+/*
+ * Modified by Vincent Bilodeau for COEN390 Technical assignment #2
+ */
+
 package ca.concordia.sensortag.weather;
 
 import java.text.DecimalFormat;
+import java.lang.Math; //Necessary for humidex convertion
 
 import ti.android.ble.sensortag.Sensor;
 import ca.concordia.sensortag.SensorTagListener;
@@ -56,6 +61,7 @@ public class WeatherStationActivity extends Activity {
 
 	private Switch mTemperatureUnitSwitch;
 	private Switch mBarometerUnitSwitch;
+	private Switch mHumidexSwitch;			//New Swtich for Humidex display
 
 	// These are "cached" copies of the last value received from the SensorTag.
 	// We save this so that, if the user changes the unit, we can immediately update the GUI
@@ -69,6 +75,7 @@ public class WeatherStationActivity extends Activity {
 	// Unit setting - these values are used to determine which unit to show for temp/pressure.
 	// They are changed when the user clicks the switches to change the unit.
 	private boolean mIsTempFahrenheit = false;
+	private boolean mHumidexDisplay = false;	//New boolean flag for humidex display
 
 	public enum BarometerUnit { KILOPASCAL, MILLIBAR, INCH_HG };
 	private BarometerUnit mBaroUnit = BarometerUnit.KILOPASCAL;
@@ -188,6 +195,8 @@ public class WeatherStationActivity extends Activity {
 		// Set up the GUI switches for displayed measurement units
 		mTemperatureUnitSwitch = (Switch) findViewById(R.id.temp_unit_switch);
 		mBarometerUnitSwitch = (Switch) findViewById(R.id.baro_unit_switch);
+		mHumidexSwitch = (Switch) findViewById(R.id.NEWID); //complete!
+
 
 		/* The code below shows you how you can capture a "click" event, in order to run some code
 		 * whenever the user clicks on a switch. The button and other GUI elements follow a similar
@@ -258,6 +267,32 @@ public class WeatherStationActivity extends Activity {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// Save the unit so we know what to use when a new measurement comes in.
 				mBaroUnit = isChecked ? BarometerUnit.INCH_HG : BarometerUnit.KILOPASCAL;
+				
+				// And update the measurements that are shown on the screen right now to use the
+				// changed unit.
+				updateDisplayedUnits();
+			}
+
+		});
+
+		/*
+		* New switch on check lister for Humidex
+		*/
+		mHumidexSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			/**
+			 * Called when the mHumidexSwitch switch is clicked, causing the state to
+			 * change. Saves the Humidex setting and updates the display to show the
+			 * desired unit.
+			 * 
+			 * @param buttonView The mHumidexSwitch switch object
+			 * @param isChecked  Whether the switch is in the checked (Humidex ON) or unchecked
+			 * (Humidex OFF) state.
+			 */
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				// Save the unit so we know what to use when a new measurement comes in.
+				mHumidexDisplay = isChecked;
 				
 				// And update the measurements that are shown on the screen right now to use the
 				// changed unit.
@@ -413,6 +448,17 @@ public class WeatherStationActivity extends Activity {
 		return result;
 	}
 
+	/*
+	Convert the temperature to the corresponding Humidex value
+	Equation using the August-Roche-Magnus approximation for the dew point
+	@return The humidex temperature in celcius
+	*/
+
+	private double calculateHumidex(){
+		private double dewPoint = 
+		243.04 * (log(mLastHumidity/100)+((17.625*mLastTemperature)/(243.04+mLastTemperature)))/(17.625-log(mLastHumidity/100)-((17.625*mLastTemperature)/(243.04+mLastTemperature)));
+	}
+
 	/**
 	 * Handles events from the SensorTagManager: SensorTag status updates, sensor measurements, etc.
 	 */
@@ -440,6 +486,8 @@ public class WeatherStationActivity extends Activity {
 			// measurements, we  retrieve this measurement and convert it to the new unit desired
 			// by the user.
 			mLastTemperature = temp;
+
+
 
 			// Convert the measurement to the unit desired by the user.
 			double displayTemp = convertTemperatureUnit(temp);
