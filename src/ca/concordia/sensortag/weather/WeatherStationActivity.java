@@ -61,7 +61,7 @@ public class WeatherStationActivity extends Activity {
 
 	private Switch mTemperatureUnitSwitch;
 	private Switch mBarometerUnitSwitch;
-	private Switch mHumidexSwitch;			//New Swtich for Humidex display
+	private Switch mHumidexSwitch;			//New Switch for Humidex display
 
 	// These are "cached" copies of the last value received from the SensorTag.
 	// We save this so that, if the user changes the unit, we can immediately update the GUI
@@ -385,8 +385,12 @@ public class WeatherStationActivity extends Activity {
 		else
 			mTemperatureUnitView.setText(getString(R.string.temperature_c_unit));
 
+		
+		double displayTemp;
+		// Convert temperature value to humidex
+		displayTemp = calculateHumidex(mLastTemperature);
 		// Recalculate the temperature in the desired unit (desired unit = mIsTempFahrenheit)
-		double displayTemp = convertTemperatureUnit(mLastTemperature);
+		displayTemp = convertTemperatureUnit(mLastTemperature);
 		// Take the calculated temperature and show it on the GUI
 		mTemperatureView.setText(tempFormat.format(displayTemp));
 
@@ -454,9 +458,12 @@ public class WeatherStationActivity extends Activity {
 	@return The humidex temperature in celcius
 	*/
 
-	private double calculateHumidex(){
+	private double calculateHumidex(double celcius){
 		double dewPoint = 
-		243.04 * (log(mLastHumidity/100)+((17.625*mLastTemperature)/(243.04+mLastTemperature)))/(17.625-log(mLastHumidity/100)-((17.625*mLastTemperature)/(243.04+mLastTemperature)));
+		243.04 * (Math.log(mLastHumidity / 100) + ((17.625 * mLastTemperature) / (243.04 + mLastTemperature))) /
+		(17.625 - Math.log(mLastHumidity / 100) - ((17.625 * mLastTemperature) / (243.04+mLastTemperature)));
+		
+		return mHumidexDisplay ? celcius + 0.5555 * (6.11 * Math.exp(5417.7530 * ((1 / 273.16) - (1 / dewPoint))) - 10) : celcius;
 	}
 
 	/**
@@ -489,8 +496,13 @@ public class WeatherStationActivity extends Activity {
 
 
 
+			
+			double displayTemp; 
+			// Apply humidex conversion if needed
+			displayTemp = calculateHumidex(temp);
 			// Convert the measurement to the unit desired by the user.
-			double displayTemp = convertTemperatureUnit(temp);
+			displayTemp = convertTemperatureUnit(displayTemp);
+			
 
 			// Format the temperature (double) into a string, with one digit after the decimal
 			// point (this format is defined by tempFormat: see declaration at top of file).
