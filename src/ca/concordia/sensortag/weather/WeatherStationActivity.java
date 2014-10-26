@@ -390,7 +390,7 @@ public class WeatherStationActivity extends Activity {
 		// Convert temperature value to humidex
 		displayTemp = calculateHumidex(mLastTemperature);
 		// Recalculate the temperature in the desired unit (desired unit = mIsTempFahrenheit)
-		displayTemp = convertTemperatureUnit(mLastTemperature);
+		displayTemp = convertTemperatureUnit(displayTemp);
 		// Take the calculated temperature and show it on the GUI
 		mTemperatureView.setText(tempFormat.format(displayTemp));
 
@@ -493,9 +493,6 @@ public class WeatherStationActivity extends Activity {
 			// measurements, we  retrieve this measurement and convert it to the new unit desired
 			// by the user.
 			mLastTemperature = temp;
-
-
-
 			
 			double displayTemp; 
 			// Apply humidex conversion if needed
