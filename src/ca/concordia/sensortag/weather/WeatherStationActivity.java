@@ -195,7 +195,7 @@ public class WeatherStationActivity extends Activity {
 		// Set up the GUI switches for displayed measurement units
 		mTemperatureUnitSwitch = (Switch) findViewById(R.id.temp_unit_switch);
 		mBarometerUnitSwitch = (Switch) findViewById(R.id.baro_unit_switch);
-		mHumidexSwitch = (Switch) findViewById(R.id.NEWID); //complete!
+		mHumidexSwitch = (Switch) findViewById(R.id.humidex_switch);
 
 
 		/* The code below shows you how you can capture a "click" event, in order to run some code
@@ -455,7 +455,7 @@ public class WeatherStationActivity extends Activity {
 	*/
 
 	private double calculateHumidex(){
-		private double dewPoint = 
+		double dewPoint = 
 		243.04 * (log(mLastHumidity/100)+((17.625*mLastTemperature)/(243.04+mLastTemperature)))/(17.625-log(mLastHumidity/100)-((17.625*mLastTemperature)/(243.04+mLastTemperature)));
 	}
 

@@ -112,7 +112,7 @@
             android:id="@+id/layout_units"
             style="@style/box_unit_switch"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="left|top"
             android:orientation="vertical" >
 
@@ -133,6 +133,16 @@
                 android:text="@string/pref_baro_unit"
                 android:textOff="@string/barometer_kpa_unit"
                 android:textOn="@string/barometer_inhg_unit" />
+
+            <Switch
+                android:id="@+id/humidex_switch"
+                style="@style/switch_unit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pref_humidex_state"
+                android:textOff="@string/humidex_off"
+                android:textOn="@string/humidex_on" />
+
         </LinearLayout>
     </LinearLayout>
 

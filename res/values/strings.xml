@@ -17,5 +17,8 @@
     <!-- Preference strings -->
     <string name="pref_temp_unit">Temperature unit</string>
     <string name="pref_baro_unit">Pressure unit</string>
+    <string name="humidex_on">On</string>
+    <string name="humidex_off">Off</string>
+    <string name="pref_humidex_state">Humidex</string>
 </resources>
 
