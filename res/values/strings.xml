@@ -20,5 +20,6 @@
     <string name="humidex_on">On</string>
     <string name="humidex_off">Off</string>
     <string name="pref_humidex_state">Humidex</string>
+    <string name="temperature_title_humidex">Humidity Index</string>
 </resources>
 

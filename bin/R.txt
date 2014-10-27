@@ -187,6 +187,7 @@ int string tObj 0x7f05001e
 int string temperature_c_unit 0x7f050039
 int string temperature_f_unit 0x7f05003a
 int string temperature_title 0x7f050036
+int string temperature_title_humidex 0x7f050044
 int string tie2e 0x7f050012
 int string title_device_list 0x7f050002
 int string title_oad 0x7f050028

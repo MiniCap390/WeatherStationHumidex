@@ -51,6 +51,7 @@ public class WeatherStationActivity extends Activity {
 
 	// GUI elements - TextView is the Java class for text-box elements on the screen, and
 	// Switch is the Java class for the on-off switch element
+	private TextView mTemperatureHeaderView;
 	private TextView mTemperatureView;
 	private TextView mTemperatureUnitView;
 	private TextView mBarometerView;
@@ -187,6 +188,7 @@ public class WeatherStationActivity extends Activity {
 		// Get references to the GUI text box objects
 		mTemperatureView = (TextView) findViewById(R.id.value_temp);
 		mTemperatureUnitView = (TextView) findViewById(R.id.unit_temp);
+		mTemperatureHeaderView = (TextView) findViewById(R.id.header_temp);
 		mBarometerView = (TextView) findViewById(R.id.value_baro);
 		mBarometerUnitView = (TextView) findViewById(R.id.unit_baro);
 		mHumidityView = (TextView) findViewById(R.id.value_humi);
@@ -293,6 +295,13 @@ public class WeatherStationActivity extends Activity {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				// Save the unit so we know what to use when a new measurement comes in.
 				mHumidexDisplay = isChecked;
+				
+				if(mHumidexDisplay){
+					mTemperatureHeaderView.setText(getString(R.string.temperature_title_humidex));
+				}
+				else{
+					mTemperatureHeaderView.setText(getString(R.string.temperature_title));
+				}
 				
 				// And update the measurements that are shown on the screen right now to use the
 				// changed unit.
@@ -463,7 +472,7 @@ public class WeatherStationActivity extends Activity {
 		243.04 * (Math.log(mLastHumidity / 100) + ((17.625 * mLastTemperature) / (243.04 + mLastTemperature))) /
 		(17.625 - Math.log(mLastHumidity / 100) - ((17.625 * mLastTemperature) / (243.04+mLastTemperature)));
 		
-		return mHumidexDisplay ? celcius + 0.5555 * (6.11 * Math.exp(5417.7530 * ((1 / 273.16) - (1 / dewPoint))) - 10) : celcius;
+		return mHumidexDisplay ? celcius + 0.5555 * (6.11 * Math.exp(5417.7530 * ((1 / 273.16) - (1 / (dewPoint + 273.15)))) - 10) : celcius;
 	}
 
 	/**

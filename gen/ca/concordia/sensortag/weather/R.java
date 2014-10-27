@@ -227,6 +227,7 @@ public final class R {
         public static final int temperature_c_unit=0x7f050039;
         public static final int temperature_f_unit=0x7f05003a;
         public static final int temperature_title=0x7f050036;
+        public static final int temperature_title_humidex=0x7f050044;
         public static final int tie2e=0x7f050012;
         public static final int title_device_list=0x7f050002;
         /**  FWUpdate activity 
